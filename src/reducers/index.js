@@ -7,13 +7,19 @@ import isEmpty from 'lodash/isEmpty';
 
 const mergeByProperty = (arr1, arr2, prop) => {
   each(arr2, function(arr2obj) {
-   let arr1obj = find(arr1, function(arr1obj) {
+    let arr1obj = find(arr1, function(arr1obj) {
       return arr1obj[prop] === arr2obj[prop];
     });
 
-     arr1obj ? extend(arr1obj, arr2obj) : arr1.push(arr2obj);
+    arr1obj ? extend(arr1obj, arr2obj) : arr1.push(arr2obj);
   });
   return arr1;
+};
+
+const updateWebStorage = (products, totalPrice, totalCount) => {
+  window.sessionStorage.setItem('products', JSON.stringify(products));
+  window.sessionStorage.setItem('totalPrice', totalPrice);
+  window.sessionStorage.setItem('totalCount', totalCount);
 };
 
 const initialState = {
@@ -29,7 +35,7 @@ export default function productReducer(state = initialState, action) {
       const totalCount = parseInt(window.sessionStorage.getItem('totalCount'));
       const totalPrice = parseInt(window.sessionStorage.getItem('totalPrice'));
 
-      if(!isEmpty(products)) {
+      if (!isEmpty(products)) {
         return {
           ...state,
           products,
@@ -65,9 +71,7 @@ export default function productReducer(state = initialState, action) {
       products[index] = {...products[index], count: products[index]['count'] + 1 || 1};
       totalCount += 1;
       totalPrice += products[index]['sellingPrice'];
-      window.sessionStorage.setItem('products', JSON.stringify(products));
-      window.sessionStorage.setItem('totalPrice', totalPrice);
-      window.sessionStorage.setItem('totalCount', totalCount);
+      updateWebStorage(products, totalPrice, totalCount);
       return {
         ...state,
         products,
@@ -85,9 +89,7 @@ export default function productReducer(state = initialState, action) {
       products[index] = {...products[index], count: products[index]['count'] - 1 || 0};
       totalCount -= 1;
       totalPrice -= products[index]['sellingPrice'];
-      window.sessionStorage.setItem('products', JSON.stringify(products));
-      window.sessionStorage.setItem('totalPrice', totalPrice);
-      window.sessionStorage.setItem('totalCount', totalCount);
+      updateWebStorage(products, totalPrice, totalCount);
 
       return {
         ...state,

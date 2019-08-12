@@ -1,12 +1,14 @@
 import React from 'react';
 import {Button, Card, Col, Icon} from 'antd';
+import './Product.less';
 
 const {Meta} = Card;
 
 export const Product = (props) => (
     <Col span={12}>
       <Card
-          style={{width: 300, marginTop: 16}}
+          className={'card'}
+          extra={props.defaultOffer && <div className={'extras'}>{props.defaultOffer}</div>}
           cover={
             props.productImages && <img
                 alt="example"
@@ -16,8 +18,9 @@ export const Product = (props) => (
           }
           actions={props.count ? [
                 <Button onClick={props.decrementHandler} value={props.productName}><Icon type="minus"/></Button>,
-                <span style={{fontSize: 16, fontWeight: 'bold'}}>{props.count}</span>,
-                <Button onClick={props.incrementHandler} type="primary" value={props.productName}><Icon type="plus"/></Button>
+                <span className={'count'}>{props.count}</span>,
+                <Button onClick={props.incrementHandler} type="primary" value={props.productName}><Icon
+                    type="plus"/></Button>
               ] :
               [
                 <Button onClick={props.incrementHandler} value={props.productName}>Add</Button>
